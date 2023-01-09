@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/products', (req, res) => {
-    res.json([1,2,3]);
+    res.json([{"name": "John", "age": "34"}]);
 })
 
 const PORT = process.env.PORT || 5000;
