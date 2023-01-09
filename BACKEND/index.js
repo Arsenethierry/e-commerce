@@ -11,6 +11,10 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 })
 
+app.get('/products', (req, res) => {
+    res.json([1,2,3]);
+})
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
