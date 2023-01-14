@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, IconButton, makeStyles, Theme, Tooltip, Typography } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../features/cartSlice';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) => ({
     title: {
@@ -67,14 +68,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
 }));
 
-function Home({ data }) {
+function ProductCard({ data }) {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const handleAddToCart = (product) => {
         dispatch(addToCart(product));
-    }
-
+        navigate('/cart')
+    }    
     const classes = useStyles()
+
     return (
         <>
            <Card variant="outlined" className={classes.card}>
@@ -110,4 +113,4 @@ function Home({ data }) {
     );
 }
 
-export default Home;
+export default ProductCard;

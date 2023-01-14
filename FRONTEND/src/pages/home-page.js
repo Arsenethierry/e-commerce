@@ -2,7 +2,7 @@ import { Box, Button, Grid, Typography } from '@material-ui/core';
 import React from 'react';
 import BoxLoader from '../@components/box-loading';
 import HomeHeader from '../@components/homeHeader';
-import Home from '../components/Home';
+import ProductCard from '../components/product-card';
 import { useGetAllProductsQuery } from '../features/productsApi';
 
 function HomePage() {
@@ -16,7 +16,7 @@ function HomePage() {
                 {
                     products.map((data)=> (
                         <Grid item key={data.id} xs={12} sm={6} md={4} lg={3}>
-                            <Home data={data} />
+                            <ProductCard data={data} />
                         </Grid>
                     ))
                 }

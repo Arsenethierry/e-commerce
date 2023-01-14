@@ -1,16 +1,19 @@
 import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
 import Navbar from './components/Navbar';
 import {BrowserRouter , Routes , Route, } from 'react-router-dom'
 import Cart from './components/Cart';
 import About from './components/About';
 import ErrorPage from './errorPage';
 import HomePage from './pages/home-page';
+import { ToastContainer } from 'react-toastify'
 
 function App() {
 
   return (
     <div className="App">
       <BrowserRouter>
+      <ToastContainer />
       <Navbar />
         <Routes>
           <Route exact path="/" element={<HomePage />} />
