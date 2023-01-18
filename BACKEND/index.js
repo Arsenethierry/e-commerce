@@ -1,8 +1,11 @@
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const products = require('./products');
 
 const app = express();
+
+require('dotenv').config()
 
 app.use(cors());
 
@@ -17,7 +20,13 @@ app.get('/products', (req, res) => {
 })
 
 const PORT = process.env.PORT || 5000;
-
+const dburl = process.env.DB_URL
 app.listen(PORT, () => {
     console.log(`listening on port ${PORT}`);
 })
+
+mongoose.connect(dburl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(() => console.log("connected to mongoDb"))
+.catch((error) => console.log(`error ${error}`))
