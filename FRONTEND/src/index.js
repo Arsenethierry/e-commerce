@@ -8,7 +8,8 @@ import { Provider } from "react-redux";
 import productsReducer, { productsFetch } from './features/productsSlice';
 import { productsApi } from './features/productsApi';
 import { ApiProvider } from '@reduxjs/toolkit/dist/query/react';
-import cartReducer from './features/cartSlice';
+import cartReducer, { getTotals } from './features/cartSlice';
+import { CssBaseline } from '@material-ui/core';
 
 const store = configureStore({
   reducer: {
@@ -21,12 +22,14 @@ const store = configureStore({
 });
 
 store.dispatch(productsFetch())
+store.dispatch(getTotals())
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       {/* <ApiProvider api={productsApi}> */}
+      <CssBaseline />
         <App />
       {/* </ApiProvider> */}
     </Provider>

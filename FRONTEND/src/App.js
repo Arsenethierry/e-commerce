@@ -2,11 +2,11 @@ import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from './components/Navbar';
 import {BrowserRouter , Routes , Route, } from 'react-router-dom'
-import Cart from './components/Cart';
 import About from './components/About';
 import ErrorPage from './errorPage';
 import HomePage from './pages/home-page';
 import { ToastContainer } from 'react-toastify'
+import CartPage from './pages/cart-page';
 
 function App() {
 
@@ -17,7 +17,7 @@ function App() {
       <Navbar />
         <Routes>
           <Route exact path="/" element={<HomePage />} />
-          <Route exact path="/cart" element={<Cart />} />
+          <Route exact path="/cart" element={<CartPage />} />
           <Route exact path="/about" element={<About />} />
           <Route path='*' element={<ErrorPage />} />
         </Routes>

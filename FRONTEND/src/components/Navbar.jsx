@@ -1,12 +1,16 @@
-import { AppBar, Box, createStyles, IconButton, makeStyles, Theme, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Badge, Box, createStyles, IconButton, makeStyles, Theme, Toolbar, Typography } from '@material-ui/core';
 import React from 'react';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme: Theme) => 
 createStyles({
     root: {
         flexGrow: 1,
+        top: 0,
+        left: 0,
+        marginBottom: "60px",
     },
     title: {
         flexGrow: 1,
@@ -19,10 +23,12 @@ createStyles({
 
 function Navbar(props) {
 
+    const { cartTotalQuantity } = useSelector((state)=> state.cart)
+
     const classes = useStyles()
     return (
         <div className={classes.root}>
-            <AppBar position='static'>
+            <AppBar position='fixed'>
                 <Toolbar className={classes.Toolbar}>
                     <Box flexGrow={1}>
                         <Link to='/' style={{ color: "#fff", textDecoration: "none" }}>
@@ -33,9 +39,9 @@ function Navbar(props) {
                     </Box>
                     <div>
                         <Link to='/cart' style={{ color: "#fff" }}>
-                            <IconButton color='inherit'>
+                            <Badge badgeContent={cartTotalQuantity} color="secondary">
                                 <ShoppingCartIcon />
-                            </IconButton>
+                            </Badge>
                         </Link>
                     </div>
                 </Toolbar>
