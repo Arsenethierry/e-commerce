@@ -93,6 +93,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Cart() {
     const cart = useSelector((state)=> state.cart)
+    const auth = useSelector((state)=> state.token)
     const dispatch = useDispatch()
 
     useEffect(()=> {

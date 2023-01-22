@@ -10,12 +10,14 @@ import { productsApi } from './features/productsApi';
 import { ApiProvider } from '@reduxjs/toolkit/dist/query/react';
 import cartReducer, { getTotals } from './features/cartSlice';
 import { CssBaseline } from '@material-ui/core';
+import authReducer from './features/authSlice';
 
 const store = configureStore({
   reducer: {
     products: productsReducer,
     cart: cartReducer,
     [productsApi.reducerPath]: productsApi.reducer,
+    auth: authReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(productsApi.middleware)
   
