@@ -6,8 +6,9 @@ import { InputAdornment, Button, Grid, makeStyles, TextField, Typography } from 
 import LockIcon from '@material-ui/icons/Lock';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { registerUser } from './../features/authSlice';
+import { loginUser, registerUser } from './../features/authSlice';
 import Alert from '@material-ui/lab/Alert';
+import { useEffect } from 'react';
 
 
 const useStyles = makeStyles(() => ({
@@ -60,12 +61,23 @@ const registerSchema = yup.object().shape({
     password: yup.string().required().label("Enter password")
 })
 
+const loginSchema = yup.object().shape({
+    email: yup.string().required().label("Enter email").email().matches(emailRegex),
+    password: yup.string().required().label("Enter password")
+})
+
 function AuthPage({ isNewUser }) {
 
     const classes = useStyles();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const auth = useSelector(state => state.auth)
+    const auth = useSelector(state => state.auth);
+
+    useEffect(() => {
+        if (auth.id) {
+            navigate('/cart')
+        }
+    }, [auth.id])
 
     const { control, handleSubmit, formState } = useForm({
         defaultValues: {
@@ -73,12 +85,12 @@ function AuthPage({ isNewUser }) {
             email: "",
             password: "",
         },
-        resolver: yupResolver(registerSchema)
+        resolver: isNewUser ? yupResolver(registerSchema) : yupResolver(loginSchema)
     });
     const onSubmit = (data) => {
-        isNewUser ? dispatch(registerUser(data)) : <></>
+        isNewUser ? dispatch(registerUser(data)) : dispatch(loginUser(data))
     }
-    const handleNavigateAuth = () => isNewUser ? navigate('/auth/login') : navigate('/auth/register')
+    const handleNavigateAuth = () => isNewUser ? navigate('/auth/login') : navigate('/auth/register');
     return (
         <div className={classes.root}>
             <h1>{isNewUser ? "Register" : "Login"}</h1>
@@ -95,7 +107,6 @@ function AuthPage({ isNewUser }) {
                                     <TextField
                                         fullWidth
                                         variant='outlined'
-                                        id="outlined-adornment-amount"
                                         {...field}
                                         {...ifError('name', formState.errors)}
                                         placeholder="Enter your name"
@@ -115,7 +126,6 @@ function AuthPage({ isNewUser }) {
                                 <TextField
                                     fullWidth
                                     variant='outlined'
-                                    id="outlined-adornment-amount"
                                     {...field}
                                     {...ifError('email', formState.errors)}
                                     placeholder="Enter your email"
@@ -134,7 +144,6 @@ function AuthPage({ isNewUser }) {
                                 <TextField
                                     fullWidth
                                     variant='outlined'
-                                    id="outlined-adornment-amount"
                                     type="password"
                                     {...field}
                                     startAdornment={<InputAdornment position="start"><LockIcon /></InputAdornment>}
@@ -153,8 +162,8 @@ function AuthPage({ isNewUser }) {
                     <div className={classes.line}></div>
                 </div>
                 <Button onClick={() => handleNavigateAuth()} fullWidth variant='outlined' color="primary">{isNewUser ? "Login" : "Register"}</Button>
-                {auth.registerStatus == 'rejected' ? 
-                <Alert severity="error">{auth.registerError}</Alert> : null}
+                {auth.registerStatus == 'rejected' ?
+                    <Alert severity="error">{auth.registerError}</Alert> : null}
             </form>
         </div>
     );

@@ -10,7 +10,7 @@ import { productsApi } from './features/productsApi';
 import { ApiProvider } from '@reduxjs/toolkit/dist/query/react';
 import cartReducer, { getTotals } from './features/cartSlice';
 import { CssBaseline } from '@material-ui/core';
-import authReducer from './features/authSlice';
+import authReducer, { loadUser } from './features/authSlice';
 
 const store = configureStore({
   reducer: {
@@ -25,6 +25,7 @@ const store = configureStore({
 
 store.dispatch(productsFetch())
 store.dispatch(getTotals())
+store.dispatch(loadUser())
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

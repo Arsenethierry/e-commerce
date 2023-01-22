@@ -1,8 +1,9 @@
-import { AppBar, Badge, Box, createStyles, makeStyles, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Badge, Box, Button, createStyles, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import React from 'react';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { logOut } from '../features/authSlice';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -23,8 +24,15 @@ const useStyles = makeStyles((theme) =>
 
 function Navbar(props) {
 
-    const { cartTotalQuantity } = useSelector((state) => state.cart)
+    const { cartTotalQuantity } = useSelector((state) => state.cart);
+    const user = useSelector((state) => state.auth);
 
+    const dispatch = useDispatch();
+
+    const handleLogOut = () => {
+        dispatch(logOut())
+        localStorage.removeItem('token')
+    }
     const classes = useStyles()
     return (
         <div className={classes.root}>
@@ -38,12 +46,21 @@ function Navbar(props) {
                         </Link>
                     </Box>
                     <div style={{ display: "flex", gap: "2rem" }}>
-                        <Link to='/auth/register' style={{ color: "#fff", textDecoration: "none" }}>
-                            <Typography variant='h6' className={classes.title}>Register</Typography>
-                        </Link>
-                        <Link to='/auth/login' style={{ color: "#fff", textDecoration: "none" }}>
-                            <Typography variant='h6' className={classes.title}>Login</Typography>
-                        </Link>
+                        {user.id ? (
+                            <>
+                                <Typography variant='h6' className={classes.title}>{user.name}</Typography>
+                                <Button variant='contained' onClick={handleLogOut}>LogOut</Button>
+                            </>
+                        ) : (
+                            <>
+                                <Link to='/auth/register' style={{ color: "#fff", textDecoration: "none" }}>
+                                    <Typography variant='h6' className={classes.title}>Register</Typography>
+                                </Link>
+                                <Link to='/auth/login' style={{ color: "#fff", textDecoration: "none" }}>
+                                    <Typography variant='h6' className={classes.title}>Login</Typography>
+                                </Link>
+                            </>
+                        )}
                         <Link to='/cart' style={{ color: "#fff", textDecoration: "none" }}>
                             <Badge badgeContent={cartTotalQuantity} color="secondary">
                                 <ShoppingCartIcon />
