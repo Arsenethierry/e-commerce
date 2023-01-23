@@ -4,11 +4,11 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
-import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { addToCart, decreaseQuantity, getTotals, removeFromCart } from '../features/cartSlice';
 import { useEffect } from 'react';
+import PayButton from './payment/PayButton';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
         color: "white",
         "&:hover": {
             backgroundColor: "#41D3BD",
-        } 
+        }
     },
     startshopingbutton: {
         background: "linear-gradient(91.14deg, #FF9F5A 0.27%, #D83BE6 99.57%);",
@@ -92,13 +92,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Cart() {
-    const cart = useSelector((state)=> state.cart)
-    const auth = useSelector((state)=> state.token)
+    const cart = useSelector((state) => state.cart)
+    const user = useSelector((state) => state.auth)
+
     const dispatch = useDispatch()
 
-    useEffect(()=> {
+    useEffect(() => {
         dispatch(getTotals())
-    },[dispatch,cart])
+    }, [dispatch, cart])
 
     const navigate = useNavigate()
     const classes = useStyles();
@@ -112,53 +113,53 @@ function Cart() {
     return (
         <div className={classes.root}>
             <Typography variant='h4'>My Cart</Typography>
-            { cart.cartItems.length > 0 ? cart.cartItems.map((item) => (
+            {cart.cartItems.length > 0 ? cart.cartItems.map((item) => (
                 <>
-                <div className={classes.flexDiv}>
-                    <div className={classes.itemDiv}>
-                        <ListItem>
-                            <ListItemAvatar>
-                            <Avatar>
-                                <Avatar src={item?.images[0]} alt={item?.title} />
-                            </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText primary={item?.title} secondary={item?.price + '$'} />
-                        </ListItem>
-                        <ListItem>
-                            <div className={classes.addRemove}>
-                                <IconButton disabled={item?.cartQuantity <= 1} onClick={()=>decreaseProductQuantity(item)}>
-                                    <RemoveIcon />
-                                </IconButton>
-                                <Typography>{item?.cartQuantity}</Typography>
-                                <IconButton onClick={()=> handleIncreaseProductToCart(item)}>
-                                    <AddIcon  />
-                                </IconButton>
-                            </div>
-                        </ListItem>
-                        <ListItem>
-                            <Typography variant='h5' style={{ marginLeft: "auto" }}>{item?.price * item?.cartQuantity}$</Typography>
-                        </ListItem>
-                    </div>
-                    <IconButton onClick={() =>handleRemoveFromCart(item)}>
-                        <HighlightOffIcon />
-                    </IconButton>
-                </div>
-                </>)) : (
-                    <div>
-                        <Typography variant='h6'>No Items in The Cart</Typography>
-                        <Button onClick={() => navigate('/')} variant='contained' className={classes.startshopingbutton}>Start Shopping</Button>
-                    </div>
-                )}
-                {cart.cartItems.length > 0 && (
                     <div className={classes.flexDiv}>
-                            <Button onClick={() => navigate('/')} startIcon={<KeyboardBackspaceIcon />} variant='contained' className={classes.btn}>Back To Shop</Button>
-                        <div>
-                            <Typography variant='h6'>TotalQuantity: {cart.cartTotalQuantity}</Typography>
-                            <Typography variant='h6'>Subtotal: {cart.cartTotalAmount}</Typography>
-                            <Button endIcon={<AssignmentTurnedInIcon />} variant='contained' className={classes.checkoutButton}>Checkout</Button>
+                        <div className={classes.itemDiv}>
+                            <ListItem>
+                                <ListItemAvatar>
+                                    <Avatar>
+                                        <Avatar src={item?.images[0]} alt={item?.title} />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText primary={item?.title} secondary={item?.price + '$'} />
+                            </ListItem>
+                            <ListItem>
+                                <div className={classes.addRemove}>
+                                    <IconButton disabled={item?.cartQuantity <= 1} onClick={() => decreaseProductQuantity(item)}>
+                                        <RemoveIcon />
+                                    </IconButton>
+                                    <Typography>{item?.cartQuantity}</Typography>
+                                    <IconButton onClick={() => handleIncreaseProductToCart(item)}>
+                                        <AddIcon />
+                                    </IconButton>
+                                </div>
+                            </ListItem>
+                            <ListItem>
+                                <Typography variant='h5' style={{ marginLeft: "auto" }}>{item?.price * item?.cartQuantity}$</Typography>
+                            </ListItem>
                         </div>
+                        <IconButton onClick={() => handleRemoveFromCart(item)}>
+                            <HighlightOffIcon />
+                        </IconButton>
                     </div>
-                )}
+                </>)) : (
+                <div>
+                    <Typography variant='h6'>No Items in The Cart</Typography>
+                    <Button onClick={() => navigate('/')} variant='contained' className={classes.startshopingbutton}>Start Shopping</Button>
+                </div>
+            )}
+            {cart.cartItems.length > 0 && (
+                <div className={classes.flexDiv}>
+                    <Button onClick={() => navigate('/')} startIcon={<KeyboardBackspaceIcon />} variant='contained' className={classes.btn}>Back To Shop</Button>
+                    <div>
+                        <Typography variant='h6'>TotalQuantity: {cart.cartTotalQuantity}</Typography>
+                        <Typography variant='h6'>Subtotal: {cart.cartTotalAmount}</Typography>
+                        <PayButton cartItems={cart.cartItems} />
+                    </div>
+                </div>
+            )}
 
         </div>
     );

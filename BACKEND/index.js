@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.use("/api/register", register);
 app.use("/api/login", login);
-app.use("/api/stripe", stripe);
+app.use("/stripe", stripe);
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
